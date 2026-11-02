@@ -1,0 +1,78 @@
+#!/bin/sh
+# faah - play the bundled faah sound.
+#
+# Copyright (C) 2026 the faah authors
+# SPDX-License-Identifier: MIT
+
+set -eu
+
+VERSION='@VERSION@'
+DATADIR='@DATADIR@'
+
+prog=${0##*/}
+
+usage()
+{
+	cat <<EOF
+Usage: $prog [--] [PLAYER-OPTION]...
+
+Play the bundled faah audio clip.
+
+Options:
+  -h, --help       show this help and exit
+  -V, --version    show version information and exit
+
+Any other arguments are passed to the audio player before the file
+name.  They are player specific; see the player's own documentation.
+
+Environment:
+  FAAH_AUDIO       play this file instead of the bundled clip
+  FAAH_PLAYER      use this player instead of auto-detection
+EOF
+}
+
+case ${1:-} in
+	-h|--help)
+		usage
+		exit 0
+		;;
+	-V|--version)
+		echo "faah $VERSION"
+		exit 0
+		;;
+	--)
+		shift
+		;;
+esac
+
+audio=${FAAH_AUDIO:-"$DATADIR/faah.mp3"}
+
+if [ ! -r "$audio" ]; then
+	echo "faah: cannot read $audio" >&2
+	exit 1
+fi
+
+if [ -n "${FAAH_PLAYER:-}" ]; then
+	exec "$FAAH_PLAYER" "$@" "$audio"
+elif command -v mpg123 >/dev/null 2>&1; then
+	exec mpg123 -q "$@" "$audio"
+elif command -v mpg321 >/dev/null 2>&1; then
+	exec mpg321 -q "$@" "$audio"
+elif command -v ffplay >/dev/null 2>&1; then
+	exec ffplay -nodisp -autoexit -loglevel error "$@" "$audio"
+elif command -v mpv >/dev/null 2>&1; then
+	exec mpv --no-video --really-quiet "$@" "$audio"
+elif command -v cvlc >/dev/null 2>&1; then
+	exec cvlc --play-and-exit --quiet "$@" "$audio"
+elif command -v gst-play-1.0 >/dev/null 2>&1; then
+	exec gst-play-1.0 --quiet "$@" "$audio"
+elif command -v mplayer >/dev/null 2>&1; then
+	exec mplayer -really-quiet "$@" "$audio"
+elif command -v play >/dev/null 2>&1; then
+	exec play -q "$@" "$audio"
+elif command -v afplay >/dev/null 2>&1; then
+	exec afplay "$@" "$audio"
+else
+	echo "faah: no audio player found; install mpg123 or set FAAH_PLAYER" >&2
+	exit 1
+fi

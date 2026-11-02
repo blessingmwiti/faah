@@ -1,0 +1,16 @@
+# Debian packaging artifacts
+dist/
+debian/*.dsc
+*.changes
+*.buildinfo
+
+# Build and temporary files
+.build/
+tmp/
+SUBMITTING.md
+
+# Shell scripts artifacts
+*.bak
+#.in script originals if moved or modified in place
+.DS_Store
+.opencode/

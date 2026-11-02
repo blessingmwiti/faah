@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+faah --version | grep -qx 'faah 1.0'
+faah --help | grep -q '^Usage: faah'
+test -r /usr/share/faah/faah.mp3
+test -r /usr/share/man/man1/faah.1.gz
+
+# Verify that the player is invoked without needing an audio device.
+FAAH_PLAYER=/bin/true faah

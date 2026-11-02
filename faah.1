@@ -1,0 +1,80 @@
+.TH FAAH 1 "2026-11-02" "faah 1.0" "User Commands"
+.SH NAME
+faah \- play the bundled faah sound
+.SH SYNOPSIS
+.B faah
+.RI [ \-\- ]
+.RI [ player-option ...]
+.SH DESCRIPTION
+.B faah
+plays the short audio clip shipped in
+.IR /usr/share/faah/faah.mp3 .
+It does not implement its own audio decoding: it finds a suitable player
+on the system and hands the file over to it.
+.PP
+Players are tried in this order:
+.BR mpg123 ,
+.BR mpg321 ,
+.BR ffplay ,
+.BR mpv ,
+.BR cvlc ,
+.BR gst-play-1.0 ,
+.BR mplayer ,
+.BR play ,
+and
+.BR afplay .
+The first one found is used.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print usage information and exit.
+.TP
+.BR \-V ", " \-\-version
+Print the version and exit.
+.TP
+.B \-\-
+Stop looking for faah's own options.  Everything after it is passed to
+the audio player.
+.PP
+Any argument that is not one of the options above is passed to the
+player before the file name.  These arguments are player specific.
+.SH ENVIRONMENT
+.TP
+.B FAAH_AUDIO
+Play this file instead of the bundled clip.
+.TP
+.B FAAH_PLAYER
+Use this program as the audio player instead of auto-detection.  The
+value is treated as a single command name, not a shell command line.
+.SH FILES
+.TP
+.I /usr/share/faah/faah.mp3
+The bundled audio clip.
+.SH EXIT STATUS
+.TP
+.B 0
+The clip was played successfully.
+.TP
+.B 1
+The audio file could not be read or no player was found.
+.PP
+Any other status is the exit status of the audio player.
+.SH EXAMPLES
+.TP
+.B faah
+Play the clip once.
+.TP
+.B faah \-\-loop 3
+Play the clip three times, using the mpg123 loop option.
+.TP
+.B FAAH_PLAYER=mpv faah
+Force the use of
+.BR mpv .
+.SH AUTHOR
+The faah authors.
+.SH LICENSE
+The faah program is licensed under the MIT license.  The bundled audio
+clip is licensed under Creative Commons Attribution 4.0 International
+(CC BY 4.0); see
+.I /usr/share/doc/faah/copyright
+for details.

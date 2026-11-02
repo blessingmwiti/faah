@@ -1,0 +1,20 @@
+Source: faah
+Section: sound
+Priority: optional
+Maintainer: Blessing Mwiti <me@blessingmwiti.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+Homepage: https://blessingmwiti.com
+
+Package: faah
+Architecture: all
+Depends: ${misc:Depends}, mpg123
+Description: play the bundled faah sound
+ faah is a tiny command-line wrapper that plays the short "faah" audio
+ clip shipped in this package.  It does not decode audio itself; it
+ uses an installed player, preferring mpg123 and falling back to
+ mpg321, ffplay, mpv, cvlc, gst-play, mplayer, sox or afplay.
+ .
+ It is a single, dependency-light script intended for people who want
+ the clip available from any terminal.
